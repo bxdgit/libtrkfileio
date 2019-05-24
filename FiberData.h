@@ -81,7 +81,7 @@ public:
      * @brief create Create a new empty trk file for write. **MUST BE EMPTY**
      * @return
      */
-    bool create();
+    bool writer(string fileName);
 
     /**
      * @brief appendTrack Append a track to the end of the file
@@ -98,7 +98,7 @@ public:
     /**
      * @brief close Close the file
      */
-    void Wclose();
+    //void Wclose();
 
 
 
@@ -106,7 +106,7 @@ public:
  * @brief open Open the track file
  * @return
  */
-	bool open();
+	bool open(string fileName);
 
 	/**
 	 * @brief close Close the track file

@@ -11,8 +11,9 @@ void FiberData::xInit()
 }
 
 
-bool FiberData::open()
+bool FiberData::open(string fileName)
 {
+	m_cFilepath = fileName;
     /// open trk file
     m_cFile.open(m_cFilepath.c_str(), ios::in|ios::binary);
     if( !m_cFile.is_open() )
@@ -59,6 +60,9 @@ void FiberData::close()
 {
     xInit();
     m_cFile.close();
+
+	xWriteHeader();
+	m_wFile.close();
 }
 
 bool FiberData::readTrack(size_t iTrkIdx, vector<float> &points)
@@ -179,12 +183,12 @@ FiberData::FiberData()
 FiberData::~FiberData()
 {
     close();
-	Wclose();
 }
 
 
-bool FiberData::create()
+bool FiberData::writer(string fileName)
 {
+	m_wFilepath = fileName;
     /// open trk file
     m_wFile.open(m_wFilepath.c_str(), ios::out|ios::binary);
     if( !m_wFile.is_open() )
@@ -234,11 +238,6 @@ void FiberData::save()
     return;
 }
 
-void FiberData::Wclose()
-{
-    xWriteHeader();
-    m_wFile.close();
-}
 
 void FiberData::xWriteHeader()
 {
