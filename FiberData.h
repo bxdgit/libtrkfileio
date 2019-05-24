@@ -135,12 +135,12 @@ protected:
 /**
  * @brief The TrkFileWriter class track (*.trk) file reader
  */
-class TrkFileWriter
+class FiberData
 {
 public:
-    TrkFileWriter();
-    TrkFileWriter(string &strFilepath);
-    ~TrkFileWriter();
+	FiberData();
+	FiberData(string &strFilepath);
+    ~FiberData();
 
     /**
      * @brief create Create a new empty trk file for write. **MUST BE EMPTY**
@@ -178,4 +178,6 @@ protected:
     ADD_CLASS_FIELD_NOSETTER(TrkFileHeader, cHeader, getHeader)     ///< track file header
     ADD_CLASS_FIELD(string, cFilepath, getFilepath, setFilepath)    ///< track file path
 };
+
+
 

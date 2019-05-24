@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
-#include "trkfileio.h"
+#include "FiberData.h"
 using namespace std;
 
 int main()
@@ -16,7 +16,7 @@ int main()
         return EXIT_FAILURE;
 
     /// create writer and create an empty new file
-    TrkFileWriter cWriter(strOutputFilePath);
+	FiberData cWriter(strOutputFilePath);
     cWriter.copyHeader(cReader.getHeader());    /// Copy header from the input file, beacuse the coordinates system (LPS/RAS/..) is defined in header.
     if( !cWriter.create() )
         return EXIT_FAILURE;

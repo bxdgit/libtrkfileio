@@ -183,24 +183,24 @@ void TrkFileReader::checkFile()
 }
 
 
-TrkFileWriter::TrkFileWriter()
+FiberData::FiberData()
 {
 
 }
 
 
-TrkFileWriter::TrkFileWriter(string &strFilepath)
+FiberData::FiberData(string &strFilepath)
 {
     m_cFilepath = strFilepath;
 }
 
 
-TrkFileWriter::~TrkFileWriter()
+FiberData::~FiberData()
 {
     close();
 }
 
-bool TrkFileWriter::create()
+bool FiberData::create()
 {
     /// open trk file
     m_cFile.open(m_cFilepath.c_str(), ios::out|ios::binary);
@@ -213,7 +213,7 @@ bool TrkFileWriter::create()
     return true;
 }
 
-bool TrkFileWriter::appendTrack(vector<float> &points)
+bool FiberData::appendTrack(vector<float> &points)
 {
     /// check if 3d points
     if(points.size()%3 != 0)
@@ -245,19 +245,19 @@ bool TrkFileWriter::appendTrack(vector<float> &points)
     return true;
 }
 
-void TrkFileWriter::save()
+void FiberData::save()
 {
     xWriteHeader();
     return;
 }
 
-void TrkFileWriter::close()
+void FiberData::close()
 {
     xWriteHeader();
     m_cFile.close();
 }
 
-void TrkFileWriter::copyHeader(const TrkFileHeader &other)
+void FiberData::copyHeader(const TrkFileHeader &other)
 {
     memcpy(&m_cHeader, &other, TRK_HEADER_SIZE);
     m_cHeader.n_count = 0;
@@ -266,9 +266,11 @@ void TrkFileWriter::copyHeader(const TrkFileHeader &other)
 }
 
 
-void TrkFileWriter::xWriteHeader()
+void FiberData::xWriteHeader()
 {
     m_cFile.seekp(0);
     assert(sizeof(m_cHeader) == TRK_HEADER_SIZE);         ///< make sure header is 1000 bytes
     m_cFile.write((char*)(&m_cHeader), TRK_HEADER_SIZE);   ///< write header
 }
+
+
