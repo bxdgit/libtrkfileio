@@ -1,5 +1,4 @@
-#ifndef TRKFILEIO_H
-#define TRKFILEIO_H
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -180,4 +179,3 @@ protected:
     ADD_CLASS_FIELD(string, cFilepath, getFilepath, setFilepath)    ///< track file path
 };
 
-#endif // TRKFILEIO_H

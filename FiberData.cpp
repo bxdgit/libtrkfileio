@@ -1,4 +1,4 @@
-#include "trkfileio.h"
+#include "FiberData.h"
 TrkFileReader::TrkFileReader()
 {
     xInit();
