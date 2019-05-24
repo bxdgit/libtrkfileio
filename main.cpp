@@ -7,16 +7,18 @@ using namespace std;
 int main()
 {
     /// input & output filename
-    string strInputFilePath  = "/path/to/input.trk";
-    string strOutputFilePath = "/path/to/output.trk";
+    string strInputFilePath  = "C:/input/input.trk";
+    string strOutputFilePath = "D:/output.trk";
 
     /// create reader and open file
-    TrkFileReader cReader(strInputFilePath);
+    FiberData cReader;
+	cReader.setFilepath(strInputFilePath);
     if( !cReader.open() )
         return EXIT_FAILURE;
 
     /// create writer and create an empty new file
-	FiberData cWriter(strOutputFilePath);
+	FiberData cWriter;
+	cWriter.setWFilepath(strOutputFilePath);
     cWriter.copyHeader(cReader.getHeader());    /// Copy header from the input file, beacuse the coordinates system (LPS/RAS/..) is defined in header.
     if( !cWriter.create() )
         return EXIT_FAILURE;
@@ -27,15 +29,15 @@ int main()
     srand((unsigned int)(time(nullptr)));                           /// random seed
     for(size_t i = 0; i < iTotalTrackNum; i++)
     {
-        if( rand() % 1000 < 998 )   /// 0.1% random sampling
-            continue;
+       /* if( rand() % 1000 < 998 )   /// 0.1% random sampling
+            continue;*/
         cTrk.clear();
         cReader.readTrack(i, cTrk); /// read one track from input
         cWriter.appendTrack(cTrk);  /// write it back to output
     }
 
     /// close input and output file
-    cWriter.close();
+    cWriter.Wclose();
     cReader.close();
 
     cout << "Finished" << endl;

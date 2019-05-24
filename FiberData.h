@@ -65,73 +65,10 @@ struct TrkInfo
     int16_t lengthInByte;   ///< length in bytes for all points in this track
 };
 
+
 /**
  * @brief The TrkFileReader class track (*.trk) file writer
  */
-class TrkFileReader
-{
-public:
-    TrkFileReader();
-    TrkFileReader(string& strFilepath);
-    ~TrkFileReader();
-    /**
-     * @brief open Open the track file
-     * @return
-     */
-    bool open();
-
-    /**
-     * @brief close Close the track file
-     */
-    void close();
-
-    /**
-     * @brief readTrack Read one track
-     * @param iTrkIdx the track index (start from 0)
-     * @param points
-     * @return
-     */
-    bool readTrack(size_t iTrkIdx, vector<float>& points);
-
-    /**
-     * @brief readPoint Read one point in the track
-     * @param iTrkIdx the track index (start from 0)
-     * @param iPntIdx the point index (start from 0)
-     * @param point
-     * @return
-     */
-    bool readPoint(int iTrkIdx, int iPntIdx, vector<float>& point);
-
-    /**
-     * @brief getTotalTrkNum Get total number of tracks in this file
-     * @return total number of tracks in this file
-     */
-    size_t getTotalTrkNum();
-
-    /**
-     * @brief getPointNumInTrk Get total number of points in the track
-     * @param iIdx track index (start from 0)
-     * @return total number of the points in this track
-     */
-    size_t getPointNumInTrk(int iIdx);
-
-    /**
-     * @brief checkFile For internal use, check is the file is valid
-     */
-    void checkFile();
-protected:
-    void xInit();
-    void xResetPos();
-    ADD_CLASS_FIELD_PRIVATE(fstream , cFile)                        ///< track file stream
-    ADD_CLASS_FIELD(string, cFilepath, getFilepath, setFilepath)    ///< track file path
-    ADD_CLASS_FIELD_NOSETTER(TrkFileHeader, cHeader, getHeader)     ///< track file header
-    ADD_CLASS_FIELD(int32_t, iTrkPos, getTrkPos, setTrkPos)         ///< current track index
-    ADD_CLASS_FIELD(int32_t, iPntPos, getPntPos, setPntPos)         ///< current point index
-    ADD_CLASS_FIELD_NOSETTER(int32_t, iPntPosMax, getPntPosMax)     ///< total point number in current track
-    ADD_CLASS_FIELD_NOSETTER(CONCATE(map<int32_t,TrkInfo>), cRandomAccessMap, getRandomAccessMap)    /// track (index to offset) map for random access support
-};
-
-
 /**
  * @brief The TrkFileWriter class track (*.trk) file reader
  */
@@ -139,9 +76,7 @@ class FiberData
 {
 public:
 	FiberData();
-	FiberData(string &strFilepath);
     ~FiberData();
-
     /**
      * @brief create Create a new empty trk file for write. **MUST BE EMPTY**
      * @return
@@ -169,14 +104,74 @@ public:
     /**
      * @brief close Close the file
      */
-    void close();
+    void Wclose();
+
+
+
+	/**
+ * @brief open Open the track file
+ * @return
+ */
+	bool open();
+
+	/**
+	 * @brief close Close the track file
+	 */
+	void close();
+
+	/**
+	 * @brief readTrack Read one track
+	 * @param iTrkIdx the track index (start from 0)
+	 * @param points
+	 * @return
+	 */
+	bool readTrack(size_t iTrkIdx, vector<float>& points);
+
+	/**
+	 * @brief readPoint Read one point in the track
+	 * @param iTrkIdx the track index (start from 0)
+	 * @param iPntIdx the point index (start from 0)
+	 * @param point
+	 * @return
+	 */
+	bool readPoint(int iTrkIdx, int iPntIdx, vector<float>& point);
+
+	/**
+	 * @brief getTotalTrkNum Get total number of tracks in this file
+	 * @return total number of tracks in this file
+	 */
+	size_t getTotalTrkNum();
+
+	/**
+	 * @brief getPointNumInTrk Get total number of points in the track
+	 * @param iIdx track index (start from 0)
+	 * @return total number of the points in this track
+	 */
+	size_t getPointNumInTrk(int iIdx);
+
+	/**
+	 * @brief checkFile For internal use, check is the file is valid
+	 */
+	void checkFile();
+
 
 protected:
+	void xInit();
+	void xResetPos();
     void xWriteHeader();
 
-    ADD_CLASS_FIELD_PRIVATE(fstream , cFile)    ///< track file stream
-    ADD_CLASS_FIELD_NOSETTER(TrkFileHeader, cHeader, getHeader)     ///< track file header
-    ADD_CLASS_FIELD(string, cFilepath, getFilepath, setFilepath)    ///< track file path
+
+
+	ADD_CLASS_FIELD_PRIVATE(fstream, cFile)                        ///< track file stream
+		ADD_CLASS_FIELD(string, cFilepath, getFilepath, setFilepath)    ///< track file path
+		ADD_CLASS_FIELD_NOSETTER(TrkFileHeader, cHeader, getHeader)     ///< track file header
+		ADD_CLASS_FIELD(int32_t, iTrkPos, getTrkPos, setTrkPos)         ///< current track index
+		ADD_CLASS_FIELD(int32_t, iPntPos, getPntPos, setPntPos)         ///< current point index
+		ADD_CLASS_FIELD_NOSETTER(int32_t, iPntPosMax, getPntPosMax)     ///< total point number in current track
+		ADD_CLASS_FIELD_NOSETTER(CONCATE(map<int32_t, TrkInfo>), cRandomAccessMap, getRandomAccessMap)    /// track (index to offset) map for random access support
+
+		ADD_CLASS_FIELD_PRIVATE(fstream, wFile)    ///< track file stream
+		ADD_CLASS_FIELD(string, wFilepath, getWFilepath, setWFilepath)    ///< track file path
 };
 
 

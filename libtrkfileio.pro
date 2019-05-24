@@ -1,14 +1,14 @@
-TEMPLATE = lib
-CONFIG += staticlib
+#TEMPLATE = lib
+#CONFIG += staticlib
 CONFIG += console
-CONFIG -= app_bundle
+#CONFIG -= app_bundle
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    trkfileio.cpp
+    FiberData.cpp
 
 HEADERS += \
-    trkfileio.h \
+    FiberData.h \
     defs.h
 
 CONFIG(debug, debug|release){

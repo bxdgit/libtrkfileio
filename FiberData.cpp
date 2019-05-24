@@ -1,22 +1,7 @@
 #include "FiberData.h"
-TrkFileReader::TrkFileReader()
-{
-    xInit();
-}
 
 
-TrkFileReader::TrkFileReader(string &strFilepath)
-{
-    xInit();
-    m_cFilepath = strFilepath;
-}
-
-TrkFileReader::~TrkFileReader()
-{
-    close();
-}
-
-void TrkFileReader::xInit()
+void FiberData::xInit()
 {
     m_cFilepath.clear();
     m_iPntPos = -1;
@@ -25,7 +10,7 @@ void TrkFileReader::xInit()
 }
 
 
-bool TrkFileReader::open()
+bool FiberData::open()
 {
     /// open trk file
     m_cFile.open(m_cFilepath.c_str(), ios::in|ios::binary);
@@ -69,13 +54,13 @@ bool TrkFileReader::open()
 
 }
 
-void TrkFileReader::close()
+void FiberData::close()
 {
     xInit();
     m_cFile.close();
 }
 
-bool TrkFileReader::readTrack(size_t iTrkIdx, vector<float> &points)
+bool FiberData::readTrack(size_t iTrkIdx, vector<float> &points)
 {
     map<int32_t,TrkInfo>::iterator it = m_cRandomAccessMap.find(static_cast<int32_t>(iTrkIdx));
     if( it ==  m_cRandomAccessMap.end() )
@@ -96,7 +81,7 @@ bool TrkFileReader::readTrack(size_t iTrkIdx, vector<float> &points)
 
 }
 
-bool TrkFileReader::readPoint(int iTrkIdx, int iPntIdx, vector<float> &point)
+bool FiberData::readPoint(int iTrkIdx, int iPntIdx, vector<float> &point)
 {
     map<int32_t,TrkInfo>::iterator it = m_cRandomAccessMap.find(iTrkIdx);
     if( it ==  m_cRandomAccessMap.end() )
@@ -115,7 +100,7 @@ bool TrkFileReader::readPoint(int iTrkIdx, int iPntIdx, vector<float> &point)
     return true;
 }
 
-void TrkFileReader::xResetPos()
+void FiberData::xResetPos()
 {
     m_iPntPos = -1;
     m_iTrkPos = -1;
@@ -123,12 +108,12 @@ void TrkFileReader::xResetPos()
 }
 
 
-size_t TrkFileReader::getTotalTrkNum()
+size_t FiberData::getTotalTrkNum()
 {
     return m_cRandomAccessMap.size();
 }
 
-size_t TrkFileReader::getPointNumInTrk(int iIdx)
+size_t FiberData::getPointNumInTrk(int iIdx)
 {
     map<int32_t,TrkInfo>::iterator it = m_cRandomAccessMap.find(iIdx);
     if( it ==  m_cRandomAccessMap.end() )
@@ -137,7 +122,7 @@ size_t TrkFileReader::getPointNumInTrk(int iIdx)
 }
 
 
-void TrkFileReader::checkFile()
+void FiberData::checkFile()
 {
     cerr << "Start Checking..." << endl;
     m_cFile.seekg(0);
@@ -185,28 +170,25 @@ void TrkFileReader::checkFile()
 
 FiberData::FiberData()
 {
-
+	xInit();
 }
 
-
-FiberData::FiberData(string &strFilepath)
-{
-    m_cFilepath = strFilepath;
-}
 
 
 FiberData::~FiberData()
 {
     close();
+	Wclose();
 }
+
 
 bool FiberData::create()
 {
     /// open trk file
-    m_cFile.open(m_cFilepath.c_str(), ios::out|ios::binary);
-    if( !m_cFile.is_open() )
+    m_wFile.open(m_wFilepath.c_str(), ios::out|ios::binary);
+    if( !m_wFile.is_open() )
     {
-        cerr << "fail to open file" << endl;
+        cerr << "fail to create file" << endl;
         return false;
     }
     xWriteHeader();
@@ -222,25 +204,25 @@ bool FiberData::appendTrack(vector<float> &points)
         return false;
     }
     /// append
-    m_cFile.seekp(0, ios::end);
+    m_wFile.seekp(0, ios::end);
 
     /// write total point number in this track
     int32_t iTotalPoint = static_cast<int32_t>(points.size()/3);
-    m_cFile.write((char*)&iTotalPoint, sizeof(int32_t));
+    m_wFile.write((char*)&iTotalPoint, sizeof(int32_t));
 
     /// write the points
 
-    m_cFile.write((char*)points.data(), points.size()*sizeof(float));
+    m_wFile.write((char*)points.data(), points.size()*sizeof(float));
 
     /// fill extra scalars with 0
     float fZero = 0;
     for(int i = 0; i < m_cHeader.n_scalars; i++)
-        m_cFile.write((char*)&fZero, sizeof(float));
+        m_wFile.write((char*)&fZero, sizeof(float));
 
 
     /// fill extra properties with 0
     for(int i = 0; i < m_cHeader.n_properties; i++)
-        m_cFile.write((char*)&fZero, sizeof(float));
+        m_wFile.write((char*)&fZero, sizeof(float));
 
     return true;
 }
@@ -251,26 +233,26 @@ void FiberData::save()
     return;
 }
 
-void FiberData::close()
+void FiberData::Wclose()
 {
     xWriteHeader();
-    m_cFile.close();
+    m_wFile.close();
 }
 
 void FiberData::copyHeader(const TrkFileHeader &other)
 {
-    memcpy(&m_cHeader, &other, TRK_HEADER_SIZE);
+ /*   memcpy(&m_cHeader, &other, TRK_HEADER_SIZE);
     m_cHeader.n_count = 0;
     m_cHeader.n_properties = 0; /// TODO for now it simply ignore n_properties & n_scalars
-    m_cHeader.n_scalars = 0;
+    m_cHeader.n_scalars = 0;*/
 }
 
 
 void FiberData::xWriteHeader()
 {
-    m_cFile.seekp(0);
+	m_wFile.seekp(0);
     assert(sizeof(m_cHeader) == TRK_HEADER_SIZE);         ///< make sure header is 1000 bytes
-    m_cFile.write((char*)(&m_cHeader), TRK_HEADER_SIZE);   ///< write header
+    m_wFile.write((char*)(&m_cHeader), TRK_HEADER_SIZE);   ///< write header
 }
 
 
