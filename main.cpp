@@ -19,7 +19,6 @@ int main()
     /// create writer and create an empty new file
 	FiberData cWriter;
 	cWriter.setWFilepath(strOutputFilePath);
-    cWriter.copyHeader(cReader.getHeader());    /// Copy header from the input file, beacuse the coordinates system (LPS/RAS/..) is defined in header.
     if( !cWriter.create() )
         return EXIT_FAILURE;
 

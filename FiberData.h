@@ -84,12 +84,6 @@ public:
     bool create();
 
     /**
-     * @brief copyHeader Copy a header form the other file
-     * @param other
-     */
-    void copyHeader(const TrkFileHeader& other);
-
-    /**
      * @brief appendTrack Append a track to the end of the file
      * @param points
      * @return
@@ -163,15 +157,15 @@ protected:
 
 
 	ADD_CLASS_FIELD_PRIVATE(fstream, cFile)                        ///< track file stream
-		ADD_CLASS_FIELD(string, cFilepath, getFilepath, setFilepath)    ///< track file path
-		ADD_CLASS_FIELD_NOSETTER(TrkFileHeader, cHeader, getHeader)     ///< track file header
-		ADD_CLASS_FIELD(int32_t, iTrkPos, getTrkPos, setTrkPos)         ///< current track index
-		ADD_CLASS_FIELD(int32_t, iPntPos, getPntPos, setPntPos)         ///< current point index
-		ADD_CLASS_FIELD_NOSETTER(int32_t, iPntPosMax, getPntPosMax)     ///< total point number in current track
-		ADD_CLASS_FIELD_NOSETTER(CONCATE(map<int32_t, TrkInfo>), cRandomAccessMap, getRandomAccessMap)    /// track (index to offset) map for random access support
+	ADD_CLASS_FIELD(string, cFilepath, getFilepath, setFilepath)    ///< track file path
+	ADD_CLASS_FIELD_NOSETTER(TrkFileHeader, cHeader, getHeader)     ///< track file header
+	ADD_CLASS_FIELD(int32_t, iTrkPos, getTrkPos, setTrkPos)         ///< current track index
+	ADD_CLASS_FIELD(int32_t, iPntPos, getPntPos, setPntPos)         ///< current point index
+	ADD_CLASS_FIELD_NOSETTER(int32_t, iPntPosMax, getPntPosMax)     ///< total point number in current track
+	ADD_CLASS_FIELD_NOSETTER(CONCATE(map<int32_t, TrkInfo>), cRandomAccessMap, getRandomAccessMap)    /// track (index to offset) map for random access support
 
-		ADD_CLASS_FIELD_PRIVATE(fstream, wFile)    ///< track file stream
-		ADD_CLASS_FIELD(string, wFilepath, getWFilepath, setWFilepath)    ///< track file path
+	ADD_CLASS_FIELD_PRIVATE(fstream, wFile)    ///< track file stream
+	ADD_CLASS_FIELD(string, wFilepath, getWFilepath, setWFilepath)    ///< track file path
 };
 
 

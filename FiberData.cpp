@@ -4,6 +4,7 @@
 void FiberData::xInit()
 {
     m_cFilepath.clear();
+	m_wFilepath.clear();
     m_iPntPos = -1;
     m_iTrkPos = -1;
     m_iPntPosMax = -1;
@@ -238,15 +239,6 @@ void FiberData::Wclose()
     xWriteHeader();
     m_wFile.close();
 }
-
-void FiberData::copyHeader(const TrkFileHeader &other)
-{
- /*   memcpy(&m_cHeader, &other, TRK_HEADER_SIZE);
-    m_cHeader.n_count = 0;
-    m_cHeader.n_properties = 0; /// TODO for now it simply ignore n_properties & n_scalars
-    m_cHeader.n_scalars = 0;*/
-}
-
 
 void FiberData::xWriteHeader()
 {
