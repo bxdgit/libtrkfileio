@@ -1,7 +1,7 @@
 #include "FiberData.h"
 
 
-void FiberData::xInit()
+void FiberData::Init()
 {
     m_cFilepath.clear();
 	m_wFilepath.clear();
@@ -51,17 +51,17 @@ bool FiberData::open(string fileName)
         m_cFile.peek();
         ++m_iTrkPos;
     }
-    xResetPos();
+    resetPos();
     return true;
 
 }
 
 void FiberData::close()
 {
-    xInit();
+    Init();
     m_cFile.close();
 
-	xWriteHeader();
+	writeHeader();
 	m_wFile.close();
 }
 
@@ -105,7 +105,7 @@ bool FiberData::readPoint(int iTrkIdx, int iPntIdx, vector<float> &point)
     return true;
 }
 
-void FiberData::xResetPos()
+void FiberData::resetPos()
 {
     m_iPntPos = -1;
     m_iTrkPos = -1;
@@ -169,13 +169,13 @@ void FiberData::checkFile()
     cerr << "Total:" << m_iTrkPos << endl;
     cerr << "Checking Finished..." << endl;
 
-    xResetPos();
+    resetPos();
 }
 
 
 FiberData::FiberData()
 {
-	xInit();
+	Init();
 }
 
 
@@ -186,7 +186,7 @@ FiberData::~FiberData()
 }
 
 
-bool FiberData::writer(string fileName)
+bool FiberData::write(string fileName)
 {
 	m_wFilepath = fileName;
     /// open trk file
@@ -196,7 +196,7 @@ bool FiberData::writer(string fileName)
         cerr << "fail to create file" << endl;
         return false;
     }
-    xWriteHeader();
+    writeHeader();
     return true;
 }
 
@@ -234,12 +234,12 @@ bool FiberData::appendTrack(vector<float> &points)
 
 void FiberData::save()
 {
-    xWriteHeader();
+    writeHeader();
     return;
 }
 
 
-void FiberData::xWriteHeader()
+void FiberData::writeHeader()
 {
 	m_wFile.seekp(0);
     assert(sizeof(m_cHeader) == TRK_HEADER_SIZE);         ///< make sure header is 1000 bytes

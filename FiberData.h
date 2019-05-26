@@ -81,7 +81,7 @@ public:
      * @brief create Create a new empty trk file for write. **MUST BE EMPTY**
      * @return
      */
-    bool writer(string fileName);
+    bool write(string fileName);
 
     /**
      * @brief appendTrack Append a track to the end of the file
@@ -150,9 +150,9 @@ public:
 
 
 protected:
-	void xInit();
-	void xResetPos();
-    void xWriteHeader();
+	void Init();
+	void resetPos();
+    void writeHeader();
 
 
 	string m_cFilepath; ///< track file path(in)

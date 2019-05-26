@@ -17,7 +17,7 @@ int main()
 
     /// create writer and create an empty new file
 
-    if( !fData.writer(strOutputFilePath) )
+    if( !fData.write(strOutputFilePath) )
         return EXIT_FAILURE;
 
     /// random sampling (0.1%)
