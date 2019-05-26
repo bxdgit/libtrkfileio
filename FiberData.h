@@ -8,8 +8,20 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
-#include "defs.h"
+//#include "defs.h"
 using namespace std;
+
+
+/*! concatenating multiple args into one*/
+#define CONCATE(...) __VA_ARGS__
+
+
+#define ADD_CLASS_FIELD_NOSETTER(type, name, getter) \
+    public: \
+        type& getter() { return m_##name; } \
+        type const & getter() const{ return m_##name; } \
+    private: \
+        type m_##name;
 
 static const int TRK_HEADER_SIZE = 1000;    ///< header size is 1000
 #pragma pack(push)                          ///< push current alignment to stack
@@ -148,24 +160,23 @@ public:
 	 */
 	void checkFile();
 
-
 protected:
 	void Init();
 	void resetPos();
     void writeHeader();
+private:
 
 
 	string m_cFilepath; ///< track file path(in)
 	string m_wFilepath; ///< track file path(out)
+	fstream m_cFile;///< track file stream(in)  
+	fstream m_wFile;///< track file stream(out)
 
-	ADD_CLASS_FIELD_PRIVATE(fstream, wFile)    ///< track file stream(out)
-	ADD_CLASS_FIELD_PRIVATE(fstream, cFile)                        ///< track file stream(in)  
+	int32_t m_iTrkPos;
+	int32_t m_iPntPos;
+	int32_t m_iPntPosMax;
 
-	ADD_CLASS_FIELD_NOSETTER(TrkFileHeader, cHeader, getHeader)     ///< track file header
-
-	ADD_CLASS_FIELD(int32_t, iTrkPos, getTrkPos, setTrkPos)         ///< current track index
-	ADD_CLASS_FIELD(int32_t, iPntPos, getPntPos, setPntPos)         ///< current point index
-	ADD_CLASS_FIELD_NOSETTER(int32_t, iPntPosMax, getPntPosMax)     ///< total point number in current track
+	ADD_CLASS_FIELD_NOSETTER(TrkFileHeader, cHeader, getHeader)     ///< track file header          
 	ADD_CLASS_FIELD_NOSETTER(CONCATE(map<int32_t, TrkInfo>), cRandomAccessMap, getRandomAccessMap)    /// track (index to offset) map for random access support
 
 	
